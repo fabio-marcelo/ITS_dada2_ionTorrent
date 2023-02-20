@@ -9,13 +9,23 @@ Este repositório demostra como analisar dados de metagenômica para ITS (intern
 
 # Importar sequências para dentro do qiime2
 ## Criar arquivo para importação (manifest file)
-*
 
+```bash
+echo "sample-id" > sample-id.tx
+echo "absolute-filepath" > filepath.txt
+
+for i in $(ls its_dir); do echo "$i" | awk -F _bp_ '{print $2}' | awk -F . '{print $1}' >> sample-id.txt; done
+find $(pwd)/its_dir/*fastq >> filepath.txt
+
+paste sample-id.txt filepath.txt > manifest-file.tsv
+```
+
+## Importar as sequências
 
 ```bash
 qiime tools import --type 'SampleData[SequencesWithQuality]' \       #demultiplexed single-end sequence data
-  --input-path manifest-file.tsv \                                   #path/manifest-file
+  --input-path path/manifest-file.tsv \                              #path/manifest-file
   --output-path import.qza \                                         #path to output
-  --input-format SingleEndFastqManifestPhred33                       #variation of quality scores
+  --input-format SingleEndFastqManifestPhred33V2                     #variation of quality scores
 
 ```

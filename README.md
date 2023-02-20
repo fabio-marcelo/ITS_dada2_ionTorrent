@@ -21,11 +21,19 @@ paste sample-id.txt filepath.txt > manifest-file.tsv
 ```
 
 ## Importar as sequências
-
+O output será um arquivo .qza
 ```bash
 qiime tools import --type 'SampleData[SequencesWithQuality]' \       #demultiplexed single-end sequence data
   --input-path path/manifest-file.tsv \                              #path/manifest-file
   --output-path import.qza \                                         #path to output
   --input-format SingleEndFastqManifestPhred33V2                     #variation of quality scores
 
+```
+
+## Visualizar o arquivo importado
+
+```bash
+qiime demux summarize \
+  --i-data import.qza \                                             #arquivo gerado na importação
+  --o-visualization inspec_import.qzv                               #output para visualizar em https://view.qiime2.org/
 ```

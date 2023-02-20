@@ -37,3 +37,23 @@ qiime demux summarize \
   --i-data import.qza \                                             #arquivo gerado na importação
   --o-visualization inspec_import.qzv                               #output para visualizar em https://view.qiime2.org/
 ```
+
+## Etapa de denoising (dada2)
+* devido a variabilidade no comprimento das seqs para ITS, não usaremos o truncLen;
+* --p-trim-left 15 conforme orientado em FAQ of dada2
+* --p-trunc-q - Truncate reads at the first instance of quality score less than or equal to truncQ;
+* --p-pooling-method 'pseudo' - samples are denoised independently once, ASVs detected in at least 2 samples are recorded, and samples are denoised independently a second time, but this time with prior knowledge of the recorded ASVs and thus higher sensitivity to those ASVs;
+* --p-chimera-method 'consensus' - "pooled": All reads are pooled prior to chimera detection. "consensus": Chimeras are detected in samples individually, and sequences found chimeric in a sufficient fraction of samples are removed.
+
+```bash
+qiime dada2 denoise-single \
+  --i-demultiplexed-seqs import.qza \
+  --p-trim-left 15 \
+  --p-max-ee 2.0 \
+  --p-trunc-q 2.0 \
+  --p-pooling-method'pseudo' \
+  --p-chimera-method 'consensus' \
+  --o-representative-sequences representative-seqs.qza \
+  --o-table table.qza \
+  --o-denoising-stats denoise-stats.qza
+```

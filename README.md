@@ -51,7 +51,7 @@ qiime dada2 denoise-single \
   --p-trim-left 15 \
   --p-max-ee 2.0 \
   --p-trunc-q 2.0 \
-  --p-pooling-method'pseudo' \
+  --p-pooling-method 'pseudo' \
   --p-chimera-method 'consensus' \
   --o-representative-sequences representative-seqs.qza \
   --o-table table.qza \

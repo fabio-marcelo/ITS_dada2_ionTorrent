@@ -14,4 +14,8 @@ Este repositório demostra como analisar dados de metagenômica para ITS (intern
 
 ```bash
 qiime tools import --type 'SampleData[SequencesWithQuality]' \       #demultiplexed single-end sequence data
+  --input-path manifest-file.tsv \                                   #path/manifest-file
+  --output-path import.qza \                                         #path to output
+  --input-format SingleEndFastqManifestPhred33                       #variation of quality scores
+
 ```

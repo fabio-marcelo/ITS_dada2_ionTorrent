@@ -46,14 +46,39 @@ qiime demux summarize \
 * --p-chimera-method 'consensus' - "pooled": All reads are pooled prior to chimera detection. "consensus": Chimeras are detected in samples individually, and sequences found chimeric in a sufficient fraction of samples are removed.
 
 ```bash
+echo "Starting denoising"
+
 qiime dada2 denoise-single \
   --i-demultiplexed-seqs import.qza \
   --p-trim-left 15 \
-  --p-max-ee 2.0 \
-  --p-trunc-q 2.0 \
+  --p-max-ee 2 \
+  --p-trunc-q 2 \
+  --p-trunc-len 0 \
   --p-pooling-method 'pseudo' \
   --p-chimera-method 'consensus' \
   --o-representative-sequences representative-seqs.qza \
   --o-table table.qza \
   --o-denoising-stats denoise-stats.qza
+```
+
+```bash
+qiime demux summarize \
+  --i-data denoise-stats.qza \                                             #arquivo gerado na importação
+  --o-visualization denoise-stats.qzv                               #output para visualizar em https://view.qiime2.org/
+```
+
+## Identificação taxonômica
+
+```bash
+echo "Starting Taxonomic identification"
+
+ qiime feature-classifier classify-sklearn \
+ --i-classifier path_to/classifier_file.qza \
+ --p-reads-per-batch 10000 \
+ --i-reads representative-seqs.qza \
+ --o-classification taxonomyITS.qza
+
+ qiime metadata tabulate \
+--m-input-file taxonomyITS.qza \
+--o-visualization taxonomyITS.qzv
 ```

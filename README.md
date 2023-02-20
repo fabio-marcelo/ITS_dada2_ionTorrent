@@ -39,7 +39,8 @@ qiime demux summarize \
 ```
 
 ## Etapa de denoising (dada2)
-* devido a variabilidade no comprimento das seqs para ITS, não usaremos o truncLen;
+### Executar denoising
+* devido a variabilidade no comprimento das seqs para ITS, não usaremos o --p-trunc-len [tutorial](https://benjjneb.github.io/dada2/ITS_workflow.html);
 * --p-trim-left 15 conforme orientado em FAQ of dada2
 * --p-trunc-q - Truncate reads at the first instance of quality score less than or equal to truncQ;
 * --p-pooling-method 'pseudo' - samples are denoised independently once, ASVs detected in at least 2 samples are recorded, and samples are denoised independently a second time, but this time with prior knowledge of the recorded ASVs and thus higher sensitivity to those ASVs;
@@ -48,7 +49,7 @@ qiime demux summarize \
 ```bash
 echo "Starting denoising"
 
-qiime dada2 denoise-single \
+qiime dada2 denoise-single \                                  #This method denoises single-end sequences, dereplicates them, and filters chimeras
   --i-demultiplexed-seqs import.qza \
   --p-trim-left 15 \
   --p-max-ee 2 \
@@ -56,15 +57,16 @@ qiime dada2 denoise-single \
   --p-trunc-len 0 \
   --p-pooling-method 'pseudo' \
   --p-chimera-method 'consensus' \
-  --o-representative-sequences representative-seqs.qza \
-  --o-table table.qza \
-  --o-denoising-stats denoise-stats.qza
+  --o-representative-sequences representative-seqs.qza \                    #output
+  --o-table table.qza \                                                     #output
+  --o-denoising-stats denoise-stats.qza                                     #output
 ```
 
+### Visualizar resultado do denoising
 ```bash
-qiime demux summarize \
-  --i-data denoise-stats.qza \                                             #arquivo gerado na importação
-  --o-visualization denoise-stats.qzv                               #output para visualizar em https://view.qiime2.org/
+qiime metadata tabulate \
+--m-input-file denoise-stats.qza \
+--o-visualization inspect_denoise-stats.qzv                               #output para visualizar em https://view.qiime2.org/
 ```
 
 ## Identificação taxonômica

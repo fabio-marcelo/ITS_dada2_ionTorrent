@@ -72,6 +72,10 @@ qiime metadata tabulate \
 ## Identificação taxonômica
 
 ```bash
+# classify-sklearn - usa banco treinado a priori
+# para treinar db usar fit-classifier-naive-bayes ou fit-classifier-sklearn
+
+
 echo "Starting Taxonomic identification"
 
  qiime feature-classifier classify-sklearn \

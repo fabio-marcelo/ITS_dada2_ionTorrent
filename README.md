@@ -9,7 +9,7 @@ Este repositório demostra como analisar dados de metagenômica para ITS (intern
 * Instalação do [qiime2](https://docs.qiime2.org/2022.11/install/native/#install-qiime-2-within-a-conda-environment)
 
 # Importar sequências para dentro do qiime2
-## Criar arquivo para importação (manifest file)
+## Criar arquivo para importação das reads (manifest file)
 
 ```bash
 echo "sample-id" > sample-id.tx
@@ -21,7 +21,7 @@ find $(pwd)/its_dir/*fastq >> filepath.txt
 paste sample-id.txt filepath.txt > manifest-file.tsv
 ```
 
-## Importar as sequências
+## Importar as sequências geradas no sequenciamento
 O output será um arquivo .qza
 ```bash
 qiime tools import --type 'SampleData[SequencesWithQuality]' \       #demultiplexed single-end sequence data

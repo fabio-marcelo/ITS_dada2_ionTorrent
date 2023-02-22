@@ -70,6 +70,39 @@ qiime metadata tabulate \
 ```
 
 ## Identificação taxonômica
+### Treinamento do classificador
+
+```bash
+# importar o arquivo de sequencias
+echo "Import seq file"
+
+qiime tools import \
+ --type FeatureData[Sequence] \
+ --input-path path/to/fasta_file/with?refseqs \
+ --output-path path/outputfilename.qza
+```
+
+```bash
+# importar arquivo com taxonomia
+echo "Import tax file"
+
+qiime tools import \
+ --type FeatureData[Taxonomy] \
+ --input-path path/to/txtfile/with/taxonomy \
+ --output-path unite-ver7-99-tax-01.12.2017.qza \
+ --input-format HeaderlessTSVTaxonomyFormat
+```
+
+Não é aconselhado extrair/trimar sequências do db referência antes de treinar o classificador [referência](https://github.com/qiime2/docs/blob/master/source/tutorials/feature-classifier.rst).
+
+```bash
+# treinar o classificador
+qiime feature-classifier fit-classifier-naive-bayes \       #metodo
+     --i-reference-reads ref-seqs.qza \                     #sequencias ref
+     --i-reference-taxonomy ref-taxonomy.qza \              #taxnomia do db
+     --o-classifier classifier.qza                          #output
+
+```
 
 ```bash
 # classify-sklearn - usa banco treinado a priori

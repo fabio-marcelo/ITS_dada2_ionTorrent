@@ -30,7 +30,7 @@ qiime tools import --type 'SampleData[SequencesWithQuality]' \       #demultiple
 
 ```
 
-## Visualizar o arquivo importado
+### Visualizar o arquivo importado
 
 ```bash
 qiime demux summarize \
@@ -62,7 +62,7 @@ qiime dada2 denoise-single \                                  #This method denoi
   --o-denoising-stats denoise-stats.qza                                     #output
 ```
 
-### Visualizar resultado do denoising
+#### Visualizar resultado do denoising
 ```bash
 qiime metadata tabulate \
 --m-input-file denoise-stats.qza \

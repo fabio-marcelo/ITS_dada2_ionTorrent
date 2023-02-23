@@ -4,7 +4,7 @@ Este repositório demonstra como analisar dados de metagenômica para ITS (inter
 
 # Requisitos
 * OS Ubuntu
-* Arquivos fastq
+* Arquivos fastq gerados em plataform Ion S
 * Instalaçao do [miniconda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) 
 * Instalação do [qiime2](https://docs.qiime2.org/2022.11/install/native/#install-qiime-2-within-a-conda-environment)
 * Banco de dados para classificação taxonômica de ITS
@@ -12,7 +12,9 @@ Este repositório demonstra como analisar dados de metagenômica para ITS (inter
 # Banco de dados
 ## Obtenção do banco de dados
 ### Banco de dados Unite
-
+O banco de dados do Unite está disponível [em](https://unite.ut.ee/repository.php#qiime). O banco formatado para análise na ferramenta qiime2
+é disponibilizado em 3 níveis de clusterização por similaridade: a) 97%; b) 99% e c) dinâmico com níveis escolhidos manualmente por especialistas
+em linhagens particulares de fungos, limitados ao nível de 3% de dissimilaridade.
 
 
 # Importar sequências para dentro do qiime2

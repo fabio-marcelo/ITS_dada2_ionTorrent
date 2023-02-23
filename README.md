@@ -17,7 +17,14 @@ O banco de dados do Unite está disponível [no site](https://unite.ut.ee/reposi
 é disponibilizado em 3 níveis de clusterização por similaridade: a) 97%; b) 99% e c) dinâmico com níveis escolhidos manualmente por especialistas
 em linhagens particulares de fungos, limitados ao nível de 3% de dissimilaridade. 
 
-Fazer o download do banco escolhido e proceder com a descompactação.
+Fazer o download do banco escolhido.
+```bash
+# ultima versao
+wget -c https://files.plutof.ut.ee/public/orig/98/AE/671C4D441E50DCD30691B84EED22065D77BAD3D18AF1905675633979BF323754.tgz \
+    -O sh_qiime_release_s_29.11.2022.tgz
+```
+
+ Proceder com a descompactação
 ```bash
 tar -xvf nome_do_arquivo.tgz
 ```

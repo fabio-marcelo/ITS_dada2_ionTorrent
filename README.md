@@ -1,12 +1,19 @@
 # ITS_dada2_ionTorrent
 
-Este repositório demostra como analisar dados de metagenômica para ITS (internal transcribed spacer) de fungos sequenciados em plataforma Ion S.
+Este repositório demonstra como analisar dados de metagenômica para ITS (internal transcribed spacer) de fungos sequenciados em plataforma Ion S.
 
 # Requisitos
-* OS Linux
+* OS Ubuntu
 * Arquivos fastq
 * Instalaçao do [miniconda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) 
 * Instalação do [qiime2](https://docs.qiime2.org/2022.11/install/native/#install-qiime-2-within-a-conda-environment)
+* Banco de dados para classificação taxonômica de ITS
+
+# Banco de dados
+## Obtenção do banco de dados
+### Banco de dados Unite
+
+
 
 # Importar sequências para dentro do qiime2
 ## Criar arquivo para importação das reads (manifest file)

@@ -22,6 +22,11 @@ Fazer o download do banco escolhido e proceder com a descompactação.
 tar -xvf nome_do_arquivo.tgz
 ```
 
+Remover espaços em branco e caracteres minúsculos no arquivo fasta da referência.
+```bash
+awk '/^>/ {print($0)}; /^[^>]/ {print(toupper($0))}' nome_do_arquivo.fasta | tr -d ' ' > nome_do_arquivo_uppercase.fasta
+```
+
 
 
 

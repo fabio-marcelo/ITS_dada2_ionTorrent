@@ -7,7 +7,7 @@ Este repositório demonstra como analisar dados de metagenômica para ITS (inter
 * Arquivos fastq gerados em plataform Ion S
 * Instalaçao do [miniconda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) e consequente instalação do 
 [qiime2](https://docs.qiime2.org/2022.11/install/native/#install-qiime-2-within-a-conda-environment) em ambiente conda **OU**
-* Instalação de docker e inicialização de container pela imagem docker pull qiime2/simple-remote-directory-resource
+* Instalação de docker e inicialização de container pela imagem docker pull qiime2/core
 * Banco de dados para classificação taxonômica de ITS
 
 # Banco de dados

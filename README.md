@@ -34,6 +34,9 @@ Remover espaços em branco e caracteres minúsculos no arquivo fasta da referên
 awk '/^>/ {print($0)}; /^[^>]/ {print(toupper($0))}' nome_do_arquivo.fasta | tr -d ' ' > nome_do_arquivo_uppercase.fasta
 ```
 
+### Banco de dados Bold
+
+### Banco de dados NCBI
 
 
 

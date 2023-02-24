@@ -10,6 +10,14 @@ Este repositório demonstra como analisar dados de metagenômica para ITS (inter
 * Instalação de docker e inicialização de container pela imagem docker pull qiime2/core
 * Banco de dados para classificação taxonômica de ITS
 
+# Ambiente
+## Ambiente utilizando conda environment
+* Siga as orientações descritas em [miniconda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)
+
+## Ambiente utilizando docker containner
+* Instalação do docker conforme [tutoria](https://docs.docker.com/engine/install/ubuntu/)
+* Configurar o containner com o comando ```docker run --rm -it -v```
+
 # Banco de dados
 ## Obtenção do banco de dados
 ### Banco de dados Unite

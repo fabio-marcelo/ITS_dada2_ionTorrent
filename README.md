@@ -10,13 +10,16 @@ Este repositório demonstra como analisar dados de metagenômica para ITS (inter
 * Instalação de docker e inicialização de container pela imagem docker pull qiime2/core
 * Banco de dados para classificação taxonômica de ITS
 
-# Ambiente
+# Ambiente de execução
 ## Ambiente utilizando conda environment
 * Siga as orientações descritas em [miniconda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)
 
 ## Ambiente utilizando docker containner
-* Instalação do docker conforme [tutoria](https://docs.docker.com/engine/install/ubuntu/)
-* Configurar o containner com o comando ```docker run --rm -it -v```
+* Instalação do docker engine conforme [tutoria](https://docs.docker.com/engine/install/ubuntu/)
+* Download da imagem pelo comando ```docker pull qiime2/core```
+* Acessar o diretório onde estão os arquivos a serem analisados 
+* Configurar o containner com o comando ```docker run --rm --user $(echo $UID):$(echo $UID) -it -v $(pwd):/data/qiime2/core```
+* Será aberto um terminal para o containner no qual deverão estar os arquivos a serem analisados e onde as análises serão realizadas
 
 # Banco de dados
 ## Obtenção do banco de dados
@@ -112,7 +115,9 @@ qiime metadata tabulate \
 
 ## Identificação taxonômica
 ### Treinamento do classificador
-
+É recomendado que os classificadores do banco UNITE sejam treinados nas sequenências completas. Recomenda-se ainda que seja usado o banco dinâmico, já que 
+as sequências dos outros 2 foram trimadas para a região ITS, excluindo porçoes flanqueadoras do gene do rRNA onde podem estar presentes amplicons gerados
+com primers padrões de ITS ([fonte](https://john-quensen.com/tutorials/training-the-qiime2-classifier-with-unite-its-reference-sequences/)).
 ```bash
 # importar o arquivo de sequencias
 echo "Import seq file"
@@ -138,11 +143,15 @@ Não é aconselhado extrair/trimar sequências do db referência antes de treina
 
 ```bash
 # treinar o classificador
+
+echo "Start trainning classifier"
+
 qiime feature-classifier fit-classifier-naive-bayes \       #metodo
      --i-reference-reads ref-seqs.qza \                     #sequencias ref
      --i-reference-taxonomy ref-taxonomy.qza \              #taxnomia do db
      --o-classifier classifier.qza                          #output
 
+echo "Finish trainning classifier"
 ```
 
 ```bash
@@ -161,4 +170,43 @@ echo "Starting Taxonomic identification"
  qiime metadata tabulate \
 --m-input-file taxonomyITS.qza \
 --o-visualization taxonomyITS.qzv
+
+echo "Finishing Taxonomic identification"
 ```
+
+```bash
+# gerar tabela com os táxons
+qiime taxa collapse \
+  --i-table table.qza \
+  --i-taxonomy taxonomyITS.qza \
+  --p-level 7 \
+  --output-dir ./taxa_table
+  ```
+
+  Configurar tabela com contagem de táxons por amostra
+
+  ```bash
+qime tools export --input-path table.qza \
+  --output-path $(pwd)
+
+biom convert -i feature-table.biom \
+  -o feature-table.tsv \
+  --to-tsv
+  ```
+
+  Configurar tabela com anotação da taxonomia
+
+  ```bash
+qiime tools export --input-path table.qza \
+  --output-path exported
+
+qiime tools export --input-path taxonomyITS.qza \
+  --output-path exported
+
+# alterar o header 
+cp exported/taxonomyITS.tsv exported biom-taxonomy.tsv
+sed -e '/Feature ID/#OTUID/g' biom-taxonomy.tsv
+sed -e '/Taxon/taxonomy/g' biom-taxonomy.tsv
+sed -e '/Confidence/confidence/g' biom-taxonomy.tsv
+
+  ```

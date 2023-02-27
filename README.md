@@ -65,12 +65,18 @@ paste sample-id.txt filepath.txt > manifest-file.tsv
 ```
 
 ## Importar as sequências geradas no sequenciamento
-O output será um arquivo .qza
+O output será um arquivo .qza.
+
 ```bash
-qiime tools import --type 'SampleData[SequencesWithQuality]' \       #demultiplexed single-end sequence data
-  --input-path path/manifest-file.tsv \                              #path/manifest-file
-  --output-path import.qza \                                         #path to output
-  --input-format SingleEndFastqManifestPhred33V2                     #variation of quality scores
+#demultiplexed single-end sequence data
+#path/manifest-file
+#path to output
+#variation of quality scores
+
+qiime tools import --type 'SampleData[SequencesWithQuality]' \       
+  --input-path manifest-file.tsv \                              
+  --output-path import.qza \                                         
+  --input-format SingleEndFastqManifestPhred33V2                     
 
 ```
 
@@ -93,7 +99,8 @@ qiime demux summarize \
 ```bash
 echo "Starting denoising"
 
-qiime dada2 denoise-single \                                  #This method denoises single-end sequences, dereplicates them, and filters chimeras
+#This method denoises single-end sequences, dereplicates them, and filters chimeras
+qiime dada2 denoise-single \                                  
   --i-demultiplexed-seqs import.qza \
   --p-trim-left 15 \
   --p-max-ee 2 \
@@ -101,9 +108,9 @@ qiime dada2 denoise-single \                                  #This method denoi
   --p-trunc-len 0 \
   --p-pooling-method 'pseudo' \
   --p-chimera-method 'consensus' \
-  --o-representative-sequences representative-seqs.qza \                    #output
-  --o-table table.qza \                                                     #output
-  --o-denoising-stats denoise-stats.qza                                     #output
+  --o-representative-sequences representative-seqs.qza \                    
+  --o-table table-denoised.qza \                                                     
+  --o-denoising-stats denoise-stats.qza                                     
 ```
 
 #### Visualizar resultado do denoising
@@ -124,7 +131,7 @@ echo "Import seq file"
 
 qiime tools import \
  --type FeatureData[Sequence] \
- --input-path path/to/fasta_file/with?refseqs \
+ --input-path path/to/fasta_file/with_refseqs \
  --output-path path/outputfilename.qza
 ```
 

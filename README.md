@@ -50,9 +50,9 @@ awk '/^>/ {print($0)}; /^[^>]/ {print(toupper($0))}' nome_do_arquivo.fasta | tr 
 ### Banco de dados NCBI
 
 
-
-# Importar sequências para dentro do qiime2
-## Criar arquivo para importação das reads (manifest file)
+# Análise 
+## Importar sequências para dentro do qiime2
+### Criar arquivo para importação das reads (manifest file)
 
 ```bash
 echo "sample-id" > sample-id.tx
@@ -64,7 +64,7 @@ find $(pwd)/its_dir/*fastq >> filepath.txt
 paste sample-id.txt filepath.txt > manifest-file.tsv
 ```
 
-## Importar as sequências geradas no sequenciamento
+### Importar as sequências geradas no sequenciamento
 O output será um arquivo .qza.
 
 ```bash
@@ -126,7 +126,7 @@ qiime metadata tabulate \
 as sequências dos outros 2 foram trimadas para a região ITS, excluindo porçoes flanqueadoras do gene do rRNA onde podem estar presentes amplicons gerados
 com primers padrões de ITS ([fonte](https://john-quensen.com/tutorials/training-the-qiime2-classifier-with-unite-its-reference-sequences/)).
 ```bash
-# importar o arquivo de sequencias
+#### Importar o arquivo de sequencias
 echo "Import seq file"
 
 qiime tools import \
@@ -136,7 +136,7 @@ qiime tools import \
 ```
 
 ```bash
-# importar arquivo com taxonomia
+#### Importar arquivo com taxonomia
 echo "Import tax file"
 
 qiime tools import \
@@ -148,6 +148,7 @@ qiime tools import \
 
 Não é aconselhado extrair/trimar sequências do db referência antes de treinar o classificador [referência](https://github.com/qiime2/docs/blob/master/source/tutorials/feature-classifier.rst).
 
+#### Treinar o classificador
 ```bash
 # treinar o classificador
 
@@ -182,29 +183,30 @@ echo "Finishing Taxonomic identification"
 ```
 
 ```bash
-# gerar tabela com os táxons
 
-## exportar feature table.qza
+### gerar tabela com os táxons
+
+#### exportar feature table.qza
 qiime tools export \
  --input-path table.qza \
  --output-path feature-table
 
-## exportar taxonomia
+#### exportar taxonomia
 qiime tools export \
  --input-path taxonomyITS.qza \
  --output-path taxonomy
 
-## substituir header do arquivo metadata
+#### substituir header do arquivo metadata
 sed -i 's/Feature ID/#otu-id/g' taxonomy/taxonomy.tsv
 sed -i 's/Taxon/taxonomy/g' taxonomy/taxonomy.tsv
 
-## adicionar metadados ao arquivo biom
+#### adicionar metadados ao arquivo biom
 biom add-metadata \
  --input-fp feature-table/feature-table.biom \
  --observation-metadata-fp taxonomy/taxonomy.tsv \
  --output-fp biom-with-taxonomy.biom
 
-## exportar arquivo biom como texto
+#### exportar arquivo biom como texto
 biom convert \
  --input-fp biom-with-taxonomy.biom \
  --output-fp biom-with-taxonomy.tsv \

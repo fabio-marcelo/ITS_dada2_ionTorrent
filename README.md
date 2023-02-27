@@ -69,9 +69,9 @@ O output será um arquivo .qza.
 
 ```bash
 #demultiplexed single-end sequence data
-#path/manifest-file
-#path to output
-#variation of quality scores
+# --input-path - path/manifest-file
+# --output-path - path to output
+# --input-format - variation of quality scores
 
 qiime tools import --type 'SampleData[SequencesWithQuality]' \       
   --input-path manifest-file.tsv \                              
@@ -84,10 +84,20 @@ qiime tools import --type 'SampleData[SequencesWithQuality]' \
 
 ```bash
 qiime demux summarize \
-  --i-data import.qza \                                             #arquivo gerado na importação
-  --o-visualization inspec_import.qzv                               #output para visualizar em https://view.qiime2.org/
+  --i-data import.qza \                         #arquivo gerado na importação
+  --o-visualization inspec_import.qzv           #output para visualizar em https://view.qiime2.org/
 ```
 
+### Trimagem de primers
+``bash
+$ qiime cutadapt trim-single \
+  --i-demultiplexed-sequences demultiplexed-seqs.qza \
+  --p-front GCTACGGGGGG \
+  --p-error-rate 0 \
+  --o-trimmed-sequences trimmed-seqs.qza \
+  --verbose
+  ```
+  
 ## Etapa de denoising (dada2)
 ### Executar denoising
 * devido a variabilidade no comprimento das seqs para ITS, não usaremos o --p-trunc-len [tutorial](https://benjjneb.github.io/dada2/ITS_workflow.html);

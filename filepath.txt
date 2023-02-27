@@ -1,3 +1,0 @@
-absolute-filepath
-/workspace/ITS_dada2_ionTorrent/data_toy/sample-1.fastq
-/workspace/ITS_dada2_ionTorrent/data_toy/sample-2.fastq

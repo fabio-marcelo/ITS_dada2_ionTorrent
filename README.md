@@ -32,7 +32,7 @@ Fazer o download do banco escolhido.
 ```bash
 # ultima versao
 wget -c https://files.plutof.ut.ee/public/orig/98/AE/671C4D441E50DCD30691B84EED22065D77BAD3D18AF1905675633979BF323754.tgz \
-    -O sh_qiime_release_s_29.11.2022.tgz
+    -O reference/sh_qiime_release_s_29.11.2022.tgz
 ```
 
  Proceder com a descompactação
@@ -97,7 +97,7 @@ $ qiime cutadapt trim-single \
   --o-trimmed-sequences trimmed-seqs.qza \
   --verbose
   ```
-  
+
 ## Etapa de denoising (dada2)
 ### Executar denoising
 * devido a variabilidade no comprimento das seqs para ITS, não usaremos o --p-trunc-len [tutorial](https://benjjneb.github.io/dada2/ITS_workflow.html);

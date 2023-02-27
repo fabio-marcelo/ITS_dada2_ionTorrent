@@ -55,7 +55,7 @@ awk '/^>/ {print($0)}; /^[^>]/ {print(toupper($0))}' nome_do_arquivo.fasta | tr 
 ### Criar arquivo para importação das reads (manifest file)
 
 ```bash
-echo "sample-id" > sample-id.tx
+echo "sample-id" > sample-id.txt
 echo "absolute-filepath" > filepath.txt
 
 for i in $(ls its_dir); do echo "$i" | awk -F _bp_ '{print $2}' | awk -F . '{print $1}' >> sample-id.txt; done

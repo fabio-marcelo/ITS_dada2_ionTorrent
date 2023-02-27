@@ -182,28 +182,28 @@ echo "Starting Taxonomic identification"
 echo "Finishing Taxonomic identification"
 ```
 
-### gerar tabela com os táxons
-#### exportar feature table.qza
+### Gerar tabela com os táxons
+#### Exportar feature table.qza
 ```bash
 qiime tools export \
  --input-path table.qza \
  --output-path feature-table
 ```
 
-#### exportar taxonomia
+#### Exportar taxonomia
 ```bash
 qiime tools export \
  --input-path taxonomyITS.qza \
  --output-path taxonomy
 ```
 
-#### substituir header do arquivo metadata
+#### Substituir header do arquivo metadata
 ```bash
 sed -i 's/Feature ID/#otu-id/g' taxonomy/taxonomy.tsv
 sed -i 's/Taxon/taxonomy/g' taxonomy/taxonomy.tsv
 ```
 
-#### adicionar metadados ao arquivo biom
+#### Adicionar metadados ao arquivo biom
 ```bash
 biom add-metadata \
  --input-fp feature-table/feature-table.biom \
@@ -211,7 +211,7 @@ biom add-metadata \
  --output-fp biom-with-taxonomy.biom
 ```
 
-#### exportar arquivo biom como texto
+#### Exportar arquivo biom como texto
 ```bash
 biom convert \
  --input-fp biom-with-taxonomy.biom \

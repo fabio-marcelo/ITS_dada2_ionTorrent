@@ -18,7 +18,7 @@ Este repositório demonstra como analisar dados de metagenômica para ITS (inter
 * Instalação do docker engine conforme [tutoria](https://docs.docker.com/engine/install/ubuntu/)
 * Download da imagem pelo comando ```docker pull qiime2/core```
 * Acessar o diretório onde estão os arquivos a serem analisados 
-* Configurar o containner com o comando ```docker run --rm --user $(echo $UID):$(echo $UID) -it -v $(pwd):/data/qiime2/core```
+* Configurar o containner com o comando ```docker run --rm --user $(echo $UID):$(echo $UID) -it -v $(pwd):/data/ qiime2/core```
 * Será aberto um terminal para o containner no qual deverão estar os arquivos a serem analisados e onde as análises serão realizadas
 
 # Banco de dados
@@ -154,10 +154,10 @@ qiime feature-classifier fit-classifier-naive-bayes \       #metodo
 echo "Finish trainning classifier"
 ```
 
+### Classificação taxonômica
 ```bash
 # classify-sklearn - usa banco treinado a priori
 # para treinar db usar fit-classifier-naive-bayes ou fit-classifier-sklearn
-
 
 echo "Starting Taxonomic identification"
 
@@ -176,37 +176,31 @@ echo "Finishing Taxonomic identification"
 
 ```bash
 # gerar tabela com os táxons
-qiime taxa collapse \
-  --i-table table.qza \
-  --i-taxonomy taxonomyITS.qza \
-  --p-level 7 \
-  --output-dir ./taxa_table
-  ```
 
-  Configurar tabela com contagem de táxons por amostra
+## exportar feature table.qza
+qiime tools export \
+ --input-path table.qza \
+ --output-path feature-table
 
-  ```bash
-qime tools export --input-path table.qza \
-  --output-path $(pwd)
+## exportar taxonomia
+qiime tools export \
+ --input-path taxonomyITS.qza \
+ --output-path taxonomy
 
-biom convert -i feature-table.biom \
-  -o feature-table.tsv \
-  --to-tsv
-  ```
+## substituir header do arquivo metadata
+sed -i 's/Feature ID/#otu-id/g' taxonomy/taxonomy.tsv
+sed -i 's/Taxon/taxonomy/g' taxonomy/taxonomy.tsv
 
-  Configurar tabela com anotação da taxonomia
+## adicionar metadados ao arquivo biom
+biom add-metadata \
+ --input-fp feature-table/feature-table.biom \
+ --observation-metadata-fp taxonomy/taxonomy.tsv \
+ --output-fp biom-with-taxonomy.biom
 
-  ```bash
-qiime tools export --input-path table.qza \
-  --output-path exported
-
-qiime tools export --input-path taxonomyITS.qza \
-  --output-path exported
-
-# alterar o header 
-cp exported/taxonomyITS.tsv exported biom-taxonomy.tsv
-sed -e '/Feature ID/#OTUID/g' biom-taxonomy.tsv
-sed -e '/Taxon/taxonomy/g' biom-taxonomy.tsv
-sed -e '/Confidence/confidence/g' biom-taxonomy.tsv
-
-  ```
+## exportar arquivo biom como texto
+biom convert \
+ --input-fp biom-with-taxonomy.biom \
+ --output-fp biom-with-taxonomy.tsv \
+ --to-tsv \
+ --observation-metadata-fp taxonomy/taxonomy.tsv\
+ --header-key taxonomy

@@ -173,3 +173,8 @@ biom convert \
 --to-tsv \
 --observation-metadata-fp taxonomy/taxonomy_header.tsv \
 --header-key taxonomy
+
+
+## print columns except column one
+cat data_toy/output/biom-with-taxonomy.tsv \
+| cut --complement -f1 > data_toy/output/final_output.tsv

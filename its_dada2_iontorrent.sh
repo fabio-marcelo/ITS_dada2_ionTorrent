@@ -2,23 +2,27 @@
 
 # Immediately stop on errors. keep track of the commands as they get executed. 
 set -ue
+# nao exibe os comandos
 set +x
 
 
 # This bash file runs analysis for fungal ITS sequencing data generated in Ion S platform
 # through qiime2 using dada2
 
+#####################################################################
+############################### menu de ajuda #######################
+#####################################################################
 help()
 {
-  echo -en "This shell script runs taxonomy classification using qiime2"
-  echo -en
-  echo -en "Sintaxe: bash its_dada2_iontorrent.sh [-h|i|p|r]" 
-  echo -en "opções:"
-  echo -en "-h    exibe esta ajuda"
-  echo -en "-i    folder with fastq files"
-  echo -en "-p    primer sequence"
-  echo -en "-r    folder containing reference files"
-  echo -en
+  echo -en "This shell script runs taxonomy classification using qiime2\n"
+  echo -en  "\n"
+  echo -en "Sintaxe: bash its_dada2_iontorrent.sh [-h|i|p|r]\n" 
+  echo -en "opções:\n"
+  echo -en "-h    exibe esta ajuda\n"
+  echo -en "-i    folder with fastq files\n"
+  echo -en "-p    primer sequence\n"
+  echo -en "-r    folder containing reference files\n"
+  echo -en  "\n"
 } 
 
 while getopts ":h" option; do
@@ -29,7 +33,9 @@ while getopts ":h" option; do
    esac
 done
 
-#define fastq files and folders
+#####################################################################
+########## define os parametros para o script #######################
+#####################################################################
 while getopts i:p:r: flag
 do
     case "${flag}" in
@@ -42,10 +48,15 @@ echo "fastq_folder: $fastq_folder";
 echo "primer_seq: $primer_seq";
 echo "ref_folder: $ref_folder";
 
+#####################################################################
+########## Programa principal #######################################
+#####################################################################
+# cria pasta necessarias
 mkdir "$fastq_folder"/output
+mkdir "$fastq_folder"/temp
+
 
 # create manifest file
-mkdir "$fastq_folder"/temp
 echo "sample-id" > "$fastq_folder"/temp/sample-id.txt
 echo "absolute-filepath" > "$fastq_folder"/temp/filepath.txt
 
@@ -55,16 +66,19 @@ find $(pwd)/"$fastq_folder"/*fastq >> "$fastq_folder"/temp/filepath.txt
 
 paste "$fastq_folder"/temp/sample-id.txt "$fastq_folder"/temp/filepath.txt > "$fastq_folder"/temp/manifest-file.tsv
 
+
 # import fastq files
 qiime tools import --type 'SampleData[SequencesWithQuality]' \
 --input-path "$fastq_folder"/temp/manifest-file.tsv \
 --output-path "$fastq_folder"/temp/fastq_imported.qza \
 --input-format SingleEndFastqManifestPhred33V2  
 
+
 # visualize fastq files imported
 qiime demux summarize \
 --i-data "$fastq_folder"/temp/fastq_imported.qza \
 --o-visualization "$fastq_folder"/output/inspec_import.qzv 
+
 
 # trim primers
 echo "start trimming"
@@ -74,6 +88,7 @@ qiime cutadapt trim-single \
 --p-error-rate 0 \
 --o-trimmed-sequences "$fastq_folder"/temp/trimmed-seqs.qza \
 --verbose
+
 
 # denoising
 echo "start denoising"
@@ -88,11 +103,13 @@ qiime dada2 denoise-single \
 --o-table "$fastq_folder"/temp/table-denoised.qza \
 --o-denoising-stats "$fastq_folder"/temp/denoise-stats.qza
 
+
 # visualize denoising
 qiime metadata tabulate \
 --m-input-file "$fastq_folder"/temp/denoise-stats.qza \
 --o-visualization "$fastq_folder"/output/inspect_denoise-stats.qzv
 echo "open qzv file in https://view.qiime2.org/"
+
 
 # train classifier
 echo "Import seq reference file"
@@ -113,6 +130,7 @@ time qiime feature-classifier fit-classifier-naive-bayes \
 --i-reference-reads "$fastq_folder"/temp/reference_sequences.qza \
 --i-reference-taxonomy "$fastq_folder"/temp/reference_taxonomy.qza \
 --o-classifier "$fastq_folder"/temp/trainned_classifier_qiime_release_s_29.11.2022.qza  
+
 
 # taxonomy classification
 echo "Starting Taxonomic identification"

@@ -19,8 +19,10 @@ echo "fastq_folder: $fastq_folder";
 echo "primer_seq: $primer_seq";
 echo "ref_folder: $ref_folder";
 
+mkdir "$fastq_folder"/output
 
 # create manifest file
+mkdir "$fastq_folder"/temp
 echo "sample-id" > "$fastq_folder"/temp/sample-id.txt
 echo "absolute-filepath" > "$fastq_folder"/temp/filepath.txt
 
@@ -31,10 +33,10 @@ find $(pwd)/"$fastq_folder"/*fastq >> "$fastq_folder"/temp/filepath.txt
 paste "$fastq_folder"/temp/sample-id.txt "$fastq_folder"/temp/filepath.txt > "$fastq_folder"/temp/manifest-file.tsv
 
 # import fastq files
-qiime tools import --type 'SampleData[SequencesWithQuality]' \       
-  --input-path "$fastq_folder"/temp/manifest-file.tsv \                              
-  --output-path "$fastq_folder"/temp/fastq_imported.qza \                                         
-  --input-format SingleEndFastqManifestPhred33V2  
+qiime tools import --type 'SampleData[SequencesWithQuality]' \
+--input-path "$fastq_folder"/temp/manifest-file.tsv \
+--output-path "$fastq_folder"/temp/fastq_imported.qza \
+--input-format SingleEndFastqManifestPhred33V2  
 
 # visualize fastq files imported
 qiime demux summarize \
@@ -84,7 +86,49 @@ qiime tools import \
 --input-format HeaderlessTSVTaxonomyFormat
 
 echo "Start trainning classifier"
-qiime feature-classifier fit-classifier-naive-bayes \
+time qiime feature-classifier fit-classifier-naive-bayes \
 --i-reference-reads "$fastq_folder"/temp/reference_sequences.qza \
 --i-reference-taxonomy "$fastq_folder"/temp/reference_taxonomy.qza \
 --o-classifier "$fastq_folder"/temp/trainned_classifier_qiime_release_s_29.11.2022.qza  
+
+# taxonomy classification
+echo "Starting Taxonomic identification"
+qiime feature-classifier classify-sklearn \
+--i-classifier "$fastq_folder"/temp/trainned_classifier_qiime_release_s_29.11.2022.qza \
+--p-reads-per-batch 10000 \
+--i-reads "$fastq_folder"/temp/representative-seqs.qza \
+--o-classification "$fastq_folder"/output/taxonomyITS.qza
+
+qiime metadata tabulate \
+--m-input-file "$fastq_folder"/output/taxonomyITS.qza \
+--o-visualization "$fastq_folder"/output/taxonomyITS.qzv
+
+# make table
+## export taxa
+qiime tools export \
+--input-path "$fastq_folder"/temp/table-denoised.qza \
+--output-path feature-table
+
+## export taxonomy
+qiime tools export \
+--input-path "$fastq_folder"/output/taxonomyITS.qza \
+--output-path taxonomy
+
+## replace header
+cp taxonomy/taxonomy.tsv taxonomy/taxonomy_header.tsv
+sed -i 's/Feature ID/#otu-id/g' taxonomy/taxonomy_header.tsv
+sed -i 's/Taxon/taxonomy/g' taxonomy/taxonomy_header.tsv
+
+## add metadata
+biom add-metadata \
+--input-fp feature-table/feature-table.biom \
+--observation-metadata-fp taxonomy/taxonomy_header.tsv \
+--output-fp "$fastq_folder"/output/biom-with-taxonomy.biom
+
+## convert biom to text
+biom convert \
+--input-fp "$fastq_folder"/output/biom-with-taxonomy.biom \
+--output-fp "$fastq_folder"/output/biom-with-taxonomy.tsv \
+--to-tsv \
+--observation-metadata-fp taxonomy/taxonomy_header.tsv \
+--header-key taxonomy

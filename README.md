@@ -185,7 +185,7 @@ echo "Starting Taxonomic identification"
  --i-reads representative-seqs.qza \
  --o-classification taxonomyITS.qza
 
- qiime metadata tabulate \
+qiime metadata tabulate \
 --m-input-file taxonomyITS.qza \
 --o-visualization taxonomyITS.qzv
 
@@ -227,6 +227,6 @@ biom convert \
  --input-fp biom-with-taxonomy.biom \
  --output-fp biom-with-taxonomy.tsv \
  --to-tsv \
- --observation-metadata-fp taxonomy/taxonomy.tsv\
+ --observation-metadata-fp taxonomy/taxonomy.tsv \
  --header-key taxonomy
 ```

@@ -1,12 +1,35 @@
 #!/bin/env bash
 
 # Immediately stop on errors. keep track of the commands as they get executed. 
-set -uex
+set -ue
+set +x
+
 
 # This bash file runs analysis for fungal ITS sequencing data generated in Ion S platform
 # through qiime2 using dada2
 
-#define fastq files folder
+help()
+{
+  echo -en "This shell script runs taxonomy classification using qiime2"
+  echo -en
+  echo -en "Sintaxe: bash its_dada2_iontorrent.sh [-h|i|p|r]" 
+  echo -en "opções:"
+  echo -en "-h    exibe esta ajuda"
+  echo -en "-i    folder with fastq files"
+  echo -en "-p    primer sequence"
+  echo -en "-r    folder containing reference files"
+  echo -en
+} 
+
+while getopts ":h" option; do
+   case $option in
+      h) # display Help
+         help
+         exit;;
+   esac
+done
+
+#define fastq files and folders
 while getopts i:p:r: flag
 do
     case "${flag}" in

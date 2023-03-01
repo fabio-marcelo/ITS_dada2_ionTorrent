@@ -2,7 +2,7 @@
 
 # Immediately stop on errors. keep track of the commands as they get executed. 
 set -ue
-# nao exibe os comandos
+# dont show commands
 set +x
 
 
@@ -10,15 +10,15 @@ set +x
 # through qiime2 using dada2
 
 #####################################################################
-############################### menu de ajuda #######################
+############################### help message ########################
 #####################################################################
 help()
 {
   echo -en "This shell script runs taxonomy classification using qiime2\n"
   echo -en  "\n"
-  echo -en "Sintaxe: bash its_dada2_iontorrent.sh [-h|i|p|r]\n" 
-  echo -en "opções:\n"
-  echo -en "-h    exibe esta ajuda\n"
+  echo -en "Sintax: bash its_dada2_iontorrent.sh [-h|i|p|r]\n" 
+  echo -en "options:\n"
+  echo -en "-h    show help message\n"
   echo -en "-i    folder with fastq files\n"
   echo -en "-p    primer sequence\n"
   echo -en "-r    folder containing reference files\n"
@@ -79,7 +79,7 @@ qiime demux summarize \
 --o-visualization "$fastq_folder"/output/inspec_import.qzv 
 
 
-# trim primers
+# trimm primers
 echo "start trimming"
 qiime cutadapt trim-single \
 --i-demultiplexed-sequences "$fastq_folder"/temp/fastq_imported.qza \
@@ -114,13 +114,13 @@ echo "open qzv file in https://view.qiime2.org/"
 echo "Import seq reference file"
 qiime tools import \
 --type FeatureData[Sequence] \
---input-path "$ref_folder"/sh_refs_qiime_ver9_99_s_29.11.2022_dev.fasta \
+--input-path "$ref_folder"/sh_refs_qiime_ver*_99_s_*_dev.fasta \
 --output-path "$fastq_folder"/temp/reference_sequences.qza
 
 echo "Import taxonomy reference file"
 qiime tools import \
 --type FeatureData[Taxonomy] \
---input-path "$ref_folder"/sh_taxonomy_qiime_ver9_99_s_29.11.2022_dev.txt \
+--input-path "$ref_folder"/sh_taxonomy_qiime_ver*_99_s_*_dev.txt \
 --output-path "$fastq_folder"/temp/reference_taxonomy.qza \
 --input-format HeaderlessTSVTaxonomyFormat
 

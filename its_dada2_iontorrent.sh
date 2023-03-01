@@ -33,23 +33,25 @@ while getopts ":h" option; do
    esac
 done
 
+
 #####################################################################
-########## define os parametros para o script #######################
+########## define parameters ########################################
 #####################################################################
 while getopts i:p:r: flag
 do
-    case "${flag}" in
-        i) fastq_folder=${OPTARG};;
-        p) primer_seq=${OPTARG};;
-        r) ref_folder=${OPTARG};;
-    esac
+  case $flag in
+      i) fastq_folder=${OPTARG};;
+      p) primer_seq=${OPTARG};;
+      r) ref_folder=${OPTARG};;
+  esac
 done
-echo "fastq_folder: $fastq_folder";
-echo "primer_seq: $primer_seq";
-echo "ref_folder: $ref_folder";
+
+# echo "fastq_folder: $fastq_folder";
+# echo "primer_seq: $primer_seq";
+# echo "ref_folder: $ref_folder";
 
 #####################################################################
-########## Programa principal #######################################
+########## Main program #############################################
 #####################################################################
 # cria pasta necessarias
 mkdir "$fastq_folder"/output

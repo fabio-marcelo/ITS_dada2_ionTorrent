@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # Immediately stop on errors. keep track of the commands as they get executed. 
 set -ue
@@ -25,30 +25,27 @@ help()
   echo -en  "\n"
 } 
 
-while getopts ":h" option; do
-   case $option in
-      h) # display Help
-         help
-         exit;;
-   esac
-done
-
 
 #####################################################################
 ########## define parameters ########################################
 #####################################################################
-while getopts i:p:r: flag
+while getopts ":h:i:p:r:" flag
 do
-  case $flag in
-      i) fastq_folder=${OPTARG};;
-      p) primer_seq=${OPTARG};;
-      r) ref_folder=${OPTARG};;
+  case "${flag}" in
+      h) help;;
+      i) fastq_folder=$OPTARG;;
+      p) primer_seq=$OPTARG;;
+      r) ref_folder=$OPTARG;;
   esac
 done
 
-# echo "fastq_folder: $fastq_folder";
-# echo "primer_seq: $primer_seq";
-# echo "ref_folder: $ref_folder";
+
+
+echo "fastq_folder: $fastq_folder";
+echo "primer_seq: $primer_seq";
+echo "ref_folder: $ref_folder";
+
+
 
 #####################################################################
 ########## Main program #############################################

@@ -15,7 +15,7 @@ Este repositório demonstra como analisar dados de metagenômica para ITS (inter
 * Siga as orientações descritas em [miniconda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)
 
 ## Ambiente utilizando docker containner
-* Instalação do docker engine conforme [tutoria](https://docs.docker.com/engine/install/ubuntu/)
+* Instalação do docker engine conforme [tutorial](https://docs.docker.com/engine/install/ubuntu/)
 * Download da imagem pelo comando ```docker pull qiime2/core```
 * Acessar o diretório onde estão os arquivos a serem analisados 
 * Configurar o containner com o comando ```docker run --rm --user $(echo $UID):$(echo $UID) -it -v $(pwd):/data/ qiime2/core```

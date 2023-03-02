@@ -51,8 +51,9 @@ echo "ref_folder: $ref_folder";
 ########## Main program #############################################
 #####################################################################
 # cria pasta necessarias
-mkdir "$fastq_folder"/output
-mkdir "$fastq_folder"/temp
+mkdir -p "$fastq_folder"/output
+mkdir -p "$fastq_folder"/temp
+mkdir -p "$fastq_folder"/log
 
 
 # create manifest file
@@ -70,7 +71,7 @@ paste "$fastq_folder"/temp/sample-id.txt "$fastq_folder"/temp/filepath.txt > "$f
 qiime tools import --type 'SampleData[SequencesWithQuality]' \
 --input-path "$fastq_folder"/temp/manifest-file.tsv \
 --output-path "$fastq_folder"/temp/fastq_imported.qza \
---input-format SingleEndFastqManifestPhred33V2  
+--input-format SingleEndFastqManifestPhred33V2 2> "$fastq_folder"/log/erro.txt
 
 
 # visualize fastq files imported
@@ -114,13 +115,13 @@ echo "open qzv file in https://view.qiime2.org/"
 echo "Import seq reference file"
 qiime tools import \
 --type FeatureData[Sequence] \
---input-path "$ref_folder"/sh_refs_qiime_ver*_99_s_*_dev.fasta \
+--input-path "$ref_folder"/sh_refs_qiime_ver*_99*_dev.fasta \
 --output-path "$fastq_folder"/temp/reference_sequences.qza
 
 echo "Import taxonomy reference file"
 qiime tools import \
 --type FeatureData[Taxonomy] \
---input-path "$ref_folder"/sh_taxonomy_qiime_ver*_99_s_*_dev.txt \
+--input-path "$ref_folder"/sh_taxonomy_qiime_ver*_99*_dev.txt \
 --output-path "$fastq_folder"/temp/reference_taxonomy.qza \
 --input-format HeaderlessTSVTaxonomyFormat
 

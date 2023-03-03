@@ -1,6 +1,6 @@
 # ITS_dada2_ionTorrent
 
-Este repositório demonstra como analisar dados de metagenômica para ITS (internal transcribed spacer) de fungos sequenciados em plataforma Ion S.
+Este repositório demonstra como analisar dados de metagenômica para ITS (internal transcribed spacer) de fungos sequenciados em plataforma Ion S através da ferramenta qiime2, a mais utilizada para análise metabarcoding [fonte](https://doi.org/10.1093/database/baz155).
 
 # Requisitos
 * OS Ubuntu

@@ -19,14 +19,13 @@ Este repositório demonstra o pipeline para análise de dados de metagenômica p
 * Download da imagem pelo comando ```docker pull qiime2/core```
 * Acessar o diretório onde estão os arquivos a serem analisados 
 * Configurar o containner com o comando ```docker run --rm --user $(echo $UID):$(echo $UID) -it -v $(pwd):/data/ qiime2/core```
-* Será aberto um terminal para o containner no qual deverão estar os arquivos a serem analisados e onde as análises serão realizadas
 
 # Banco de dados
 ## Obtenção do banco de dados
 ### Banco de dados Unite
 O banco de dados do Unite está disponível [no site](https://unite.ut.ee/repository.php#qiime). O banco formatado para análise na ferramenta qiime2 
-é disponibilizado em 3 níveis de clusterização por similaridade: a) 97%; b) 99% e c) dinâmico com níveis escolhidos manualmente por especialistas
-em linhagens particulares de fungos, limitados ao nível de 3% de dissimilaridade. 
+é disponibilizado em 3 níveis de clusterização por similaridade: a) 97%; b) 99% e c) dinâmico (com níveis escolhidos manualmente por especialistas
+em linhagens particulares de fungos, limitados ao nível de 3% de dissimilaridade). 
 
 Fazer o download do banco escolhido.
 ```bash
@@ -40,7 +39,7 @@ wget -c https://files.plutof.ut.ee/public/orig/98/AE/671C4D441E50DCD30691B84EED2
 tar -xvf nome_do_arquivo.tgz
 ```
 
-Remover espaços em branco e caracteres minúsculos no arquivo fasta da referência.
+Remover espaços em branco e caracteres minúsculos no arquivo fasta da referência, caso necessário.
 ```bash
 awk '/^>/ {print($0)}; /^[^>]/ {print(toupper($0))}' nome_do_arquivo.fasta | tr -d ' ' > nome_do_arquivo_uppercase.fasta
 ```
